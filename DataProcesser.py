@@ -8,6 +8,21 @@ statuses = t.getFullStatuses()
 tweets = t.getTweets()
 times = t.getTimes()
 
+#takes the texts of fetched tweets and a boolean of whether to sort the return
+#returns either sorted list or default dict with the counts of each word
+def getWordCount(tweets, shouldSort):
+	wordCounts = defaultdict(lambda: 0)
+	for tweet in tweets:
+		words = tweet.split()
+		for word in words:
+			wordCounts[word] += 1
+	if shouldSort:
+		return sorted(wordCounts.iteritems(), key= lambda (k,v) : v, reverse= True)
+	else:
+		return wordCounts
+
+#print getWordCount(tweets, True)
+
 def plotTweetTimesByDayTime(times):
 	timeOfTweets = defaultdict(lambda:0)
 	for time in times:
@@ -27,6 +42,8 @@ def plotTweetTimesByDayTime(times):
 	ax.set_xticks((0, 24, 48, 72, 96, 120, 144))
 	plt.show()
 
+#plotTweetTimesByDayTime(times)
+
 def plotTweetTimesByTime(times):
 	timeOfTweets = defaultdict(lambda:0)
 	for time in times:
@@ -42,6 +59,4 @@ def plotTweetTimesByTime(times):
 	ax.set_xticks((0, 3, 6, 9, 12, 15, 18, 21))
 	plt.show()
 
-
-plotTweetTimesByDayTime(times)
-plotTweetTimesByTime(times)
+#plotTweetTimesByTime(times)
