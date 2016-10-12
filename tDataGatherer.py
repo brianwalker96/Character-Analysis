@@ -21,7 +21,7 @@ class TDataGatherer:
 		while (fetchCount < maxCount) :
 			lastTweet = self.statuses[-1].id
 			newStatuses = self.api.GetUserTimeline(screen_name = username, count = min(maxCount-fetchCount, batchCount), max_id = lastTweet)
-			self.statuses = self.statuses + newStatuses 
+			self.statuses = self.statuses + newStatuses[1:]
 			fetchCount += batchCount
 
 	def getFullStatuses(self):
