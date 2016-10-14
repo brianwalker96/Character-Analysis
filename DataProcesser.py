@@ -1,18 +1,45 @@
 import tDataGatherer
 from collections import defaultdict
 import matplotlib.pyplot as plt
+import unicodedata
+import string
+import re
+from wordcloud import WordCloud
 
 t = tDataGatherer.TDataGatherer()
-t.fetchStatuses('bencgauld', 1000)
+t.fetchStatuses('barackobama', 1000)
 statuses = t.getFullStatuses()
 tweets = t.getTweets()
-times = t.getTimes()
+#times = t.getTimes()
 
-#takes the texts of fetched tweets and a boolean of whether to sort the return
-#returns either sorted list or default dict with the counts of each word
-def getWordCount(tweets, shouldSort):
-	wordCounts = defaultdict(lambda: 0)
+def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
+	newTweets = []
 	for tweet in tweets:
+		newTweets.append(stripString(tweet, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags))
+	return newTweets
+
+def stripString(s, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
+	s = unicodedata.normalize('NFKD', s).encode('ascii','ignore')
+	s = re.sub(r'[0-9]*', '', s, flags=re.MULTILINE)
+	if (shouldStripURLs):
+		s = re.sub(r'https?:\/\/.*[\r\n]*', '', s, flags=re.MULTILINE)
+	if (shouldStripHashTags):
+		s = re.sub(r'#[A-z]*', '', s, flags=re.MULTILINE)
+	if (shouldStripUsers):
+		s = re.sub(r'@[A-z]*', '', s, flags=re.MULTILINE)
+	if (shouldStripPunct):
+		exclude = set(string.punctuation)
+		exclude.remove("'")
+		s = ''.join(ch for ch in s if ch not in exclude)
+	s = re.sub(r'RT', '', s, flags=re.MULTILINE)
+	return s.lower()
+
+strippedTweets = getStrippedTweets(tweets, True, True, True, True)
+print strippedTweets
+
+def getWordBag(strippedTweets, shouldSort):
+	wordCounts = defaultdict(lambda: 0)
+	for tweet in strippedTweets:
 		words = tweet.split()
 		for word in words:
 			wordCounts[word] += 1
@@ -21,7 +48,26 @@ def getWordCount(tweets, shouldSort):
 	else:
 		return wordCounts
 
-#print getWordCount(tweets, True)
+print getWordBag(strippedTweets, True)
+
+def graphWordBag(text):
+	wordcloud = WordCloud().generate(text)
+	plt.imshow(wordcloud)
+	plt.axis("off")
+	wordcloud = WordCloud(max_font_size=40, relative_scaling=.5).generate(text)
+	plt.figure()
+	plt.imshow(wordcloud)
+	plt.axis("off")
+	plt.show()
+
+def getFullText(tweets):
+	fullText = ''
+	for tweet in tweets:
+		fullText += ' ' + tweet
+	return fullText
+
+fullText = getFullText(strippedTweets)
+graphWordBag(fullText)
 
 def plotTweetTimesByDayTime(times):
 	timeOfTweets = defaultdict(lambda:0)
