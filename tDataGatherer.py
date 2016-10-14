@@ -33,7 +33,6 @@ class TDataGatherer:
 		tweets = []
 		printable = set(string.printable)
 		for status in self.statuses:
-			tweets.append(filter(lambda x: x in printable, status.text))
 			tweets.append(status.text)#Unicode / ascii errors when looking at strings
 		return tweets
 
