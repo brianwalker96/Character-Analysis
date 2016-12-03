@@ -5,12 +5,20 @@ import unicodedata
 import string
 import re
 from wordcloud import WordCloud
+from DatumBox import DatumBox
+import dAccessToken
 
-t = tDataGatherer.TDataGatherer()
-t.fetchStatuses('barackobama', 1000)
-statuses = t.getFullStatuses()
-tweets = t.getTweets()
+
+#dAccess = dAccessToken.dAccessToken()
+#datum_box = DatumBox(dAccess.api_key)
+#t = tDataGatherer.TDataGatherer()
+#t.fetchStatuses('barackobama', 1000)
+#statuses = t.getFullStatuses()
+#tweets = t.getTweets()
 #times = t.getTimes()
+
+#print datum_box.twitter_sentiment_analysis("<3")
+
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newTweets = []
@@ -34,8 +42,8 @@ def stripString(s, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldSt
 	s = re.sub(r'RT', '', s, flags=re.MULTILINE)
 	return s.lower()
 
-strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-print strippedTweets
+#strippedTweets = getStrippedTweets(tweets, True, True, True, True)
+#print strippedTweets
 
 def getWordBag(strippedTweets, shouldSort):
 	wordCounts = defaultdict(lambda: 0)
@@ -48,7 +56,7 @@ def getWordBag(strippedTweets, shouldSort):
 	else:
 		return wordCounts
 
-print getWordBag(strippedTweets, True)
+#print getWordBag(strippedTweets, True)
 
 def graphWordBag(text):
 	wordcloud = WordCloud().generate(text)
@@ -66,8 +74,8 @@ def getFullText(tweets):
 		fullText += ' ' + tweet
 	return fullText
 
-fullText = getFullText(strippedTweets)
-graphWordBag(fullText)
+#fullText = getFullText(strippedTweets)
+#graphWordBag(fullText)
 
 def plotTweetTimesByDayTime(times):
 	timeOfTweets = defaultdict(lambda:0)
