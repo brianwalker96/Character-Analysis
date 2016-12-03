@@ -9,15 +9,15 @@ from DatumBox import DatumBox
 import dAccessToken
 
 
-#dAccess = dAccessToken.dAccessToken()
-#datum_box = DatumBox(dAccess.api_key)
+dAccess = dAccessToken.dAccessToken()
+datum_box = DatumBox(dAccess.api_key)
 #t = tDataGatherer.TDataGatherer()
 #t.fetchStatuses('barackobama', 1000)
 #statuses = t.getFullStatuses()
 #tweets = t.getTweets()
 #times = t.getTimes()
 
-#print datum_box.twitter_sentiment_analysis("<3")
+print datum_box.twitter_sentiment_analysis("<3")
 
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
