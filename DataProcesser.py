@@ -7,18 +7,11 @@ import re
 from wordcloud import WordCloud
 from DatumBox import DatumBox
 import dAccessToken
+import pdfWriter
 
-
-dAccess = dAccessToken.dAccessToken()
-datum_box = DatumBox(dAccess.api_key)
-#t = tDataGatherer.TDataGatherer()
-#t.fetchStatuses('barackobama', 1000)
-#statuses = t.getFullStatuses()
-#tweets = t.getTweets()
-#times = t.getTimes()
-
-print datum_box.twitter_sentiment_analysis("<3")
-
+#dAccess = dAccessToken.dAccessToken()
+#datum_box = DatumBox(dAccess.api_key)
+#print datum_box.twitter_sentiment_analysis(tweets[0])
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newTweets = []
@@ -42,8 +35,7 @@ def stripString(s, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldSt
 	s = re.sub(r'RT', '', s, flags=re.MULTILINE)
 	return s.lower()
 
-#strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-#print strippedTweets
+#print datum_box.twitter_sentiment_analysis(strippedTweets[0])
 
 def getWordBag(strippedTweets, shouldSort):
 	wordCounts = defaultdict(lambda: 0)
@@ -66,16 +58,13 @@ def graphWordBag(text):
 	plt.figure()
 	plt.imshow(wordcloud)
 	plt.axis("off")
-	plt.show()
+	plt.savefig("wordcloud.png")
 
 def getFullText(tweets):
 	fullText = ''
 	for tweet in tweets:
 		fullText += ' ' + tweet
 	return fullText
-
-#fullText = getFullText(strippedTweets)
-#graphWordBag(fullText)
 
 def plotTweetTimesByDayTime(times):
 	timeOfTweets = defaultdict(lambda:0)
@@ -111,6 +100,19 @@ def plotTweetTimesByTime(times):
 	rects1 = ax.bar(times,numbers, width)
 	ax.set_xticklabels([0, 3, 6, 9, 12, 3, 6, 9])
 	ax.set_xticks((0, 3, 6, 9, 12, 15, 18, 21))
-	plt.show()
+	plt.savefig("byTime.png")
 
-#plotTweetTimesByTime(times)
+def generateReport (name, handle):
+	t = tDataGatherer.TDataGatherer()
+	t.fetchStatuses(handle, 1000)
+	statuses = t.getFullStatuses()
+	tweets = t.getTweets()
+	times = t.getTimes()
+	strippedTweets = getStrippedTweets(tweets, False, True, True, False)
+	fullText = getFullText(strippedTweets)
+	graphWordBag(fullText)
+	plotTweetTimesByTime(times)
+	pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
+	pdfW.generatePDF()
+
+generateReport("Brian Walker", "@thebwalk")
