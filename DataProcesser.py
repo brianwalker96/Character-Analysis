@@ -5,6 +5,7 @@ import unicodedata
 import string
 import re
 from wordcloud import WordCloud
+import PIL
 from DatumBox import DatumBox
 import dAccessToken
 import pdfWriter
@@ -115,4 +116,6 @@ def generateReport (name, handle):
 	pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
 	pdfW.generatePDF()
 
-generateReport("Brian Walker", "@thebwalk")
+generateReport("Mike Rhoades", "@CoachRhoades")
+#poopy
+#scoopy
