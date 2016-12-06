@@ -9,15 +9,15 @@ import matplotlib.pyplot as plt
 import unicodedata
 import re
 import tDataGatherer
+import random
 
-
-dAccess = dAccessToken.dAccessToken()
-datum_box = DatumBox(dAccess.api_key)
-t = tDataGatherer.TDataGatherer()
-t.fetchStatuses('barackobama', 10)
-statuses = t.getFullStatuses() 
-tweets = t.getTweets(True, True)
-times = t.getTimes()
+# dAccess = dAccessToken.dAccessToken()
+# datum_box = DatumBox(dAccess.api_key)
+# t = tDataGatherer.TDataGatherer()
+# t.fetchStatuses('barackobama', 10)
+# statuses = t.getFullStatuses() 
+# tweets = t.getTweets(True, True)
+# times = t.getTimes()
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newTweets = []
@@ -61,7 +61,7 @@ def plottweetresults(tweetresults,username):
     plt.pie(sizes,explode=explode,labels=labels,colors=colors,autopct='%1.1f%%',shadow=False,startangle=140)
     plt.axis('equal')
     plt.title(str(username) + 'Tweet Analysis')
-    plt.show()                
+    plt.savefig("positivity.png")               
 
 def getTweetTimesByTime(times):
         #get tweets per time of the day
@@ -75,15 +75,12 @@ def getTweetTimesByTime(times):
 	return [times,numbers]
 
 
-def gettweetsentiment(tweets):
+def gettweetsentiment(datumBox, tweets):
     #assuming I get tweets in a list format
     data = []
     for tweet in tweets:
-        sentiment = datum_box.twitter_sentiment_analysis(tweet)
+        print tweet
+        sentiment = datumBox.twitter_sentiment_analysis(tweet)
         data.append(sentiment)
     return data
 
-
-strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-tweetsentiment = gettweetsentiment(strippedTweets)
-plottweetresults(tweetsentiment, 'barackobama')
