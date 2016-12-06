@@ -9,6 +9,7 @@ import PIL
 from DatumBox import DatumBox
 import dAccessToken
 import pdfWriter
+import sentimentclassification
 
 #dAccess = dAccessToken.dAccessToken()
 #datum_box = DatumBox(dAccess.api_key)
@@ -105,18 +106,19 @@ def plotTweetTimesByTime(times):
 
 def generateReport (name, handle):
 	t = tDataGatherer.TDataGatherer()
-	t.fetchStatuses(handle, 1000)
+	t.fetchStatuses(handle, 100)
 	statuses = t.getFullStatuses()
 	tweets = t.getTweets(True, False)
-	print tweets
 	times = t.getTimes()
-	strippedTweets = getStrippedTweets(tweets, False, True, True, False)
+	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
+	#dAccess = dAccessToken.dAccessToken()
+	#datumBox = DatumBox(dAccess.api_key)
+	#tweetsentiment = sentimentclassification.gettweetsentiment(datumBox, strippedTweets)
+	#sentimentclassifcation.plottweetresults(tweetsentiment, 'barackobama')
 	fullText = getFullText(strippedTweets)
 	graphWordBag(fullText)
 	plotTweetTimesByTime(times)
 	pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
 	pdfW.generatePDF()
 
-generateReport("Mike Rhoades", "@CoachRhoades")
-#poopy
-#scoopy
+#generateReport("Mike Rhoades", "@CoachRhoades")
