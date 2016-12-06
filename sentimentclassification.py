@@ -1,7 +1,7 @@
 import numpy as np
 import twitter
 from DatumBox import DatumBox
-import sklearn as sk
+#import sklearn as sk
 import string
 import dAccessToken
 import tAccessToken
@@ -81,7 +81,9 @@ def gettweetsentiment(tweets):
         data.append(sentiment)
     return data
 
-
+strippedTweets = getStrippedTweets(tweets, True, True, True, True)
+tweetsentiment = gettweetsentiment(strippedTweets)
+plottweetresults(tweetsentiment, 'barackobama')
 
 
 
