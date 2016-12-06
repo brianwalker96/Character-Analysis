@@ -107,7 +107,8 @@ def generateReport (name, handle):
 	t = tDataGatherer.TDataGatherer()
 	t.fetchStatuses(handle, 1000)
 	statuses = t.getFullStatuses()
-	tweets = t.getTweets()
+	tweets = t.getTweets(True, False)
+	print tweets
 	times = t.getTimes()
 	strippedTweets = getStrippedTweets(tweets, False, True, True, False)
 	fullText = getFullText(strippedTweets)

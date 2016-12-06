@@ -28,12 +28,13 @@ class TDataGatherer:
 		#don't process just return the statuses
 		return self.statuses
 
-	def getTweets(self):
+	def getTweets(self, userTweets, retweets):
 		#only the tweets themselves
 		tweets = []
 		printable = set(string.printable)
 		for status in self.statuses:
-			tweets.append(status.text)#Unicode / ascii errors when looking at strings
+			if ((userTweets and not status.retweeted) or (retweets and status.retweeted)):
+				tweets.append(status.text)#Unicode / ascii errors when looking at strings
 		return tweets
 
 	def getTimes(self):

@@ -1,2 +1,3 @@
 pip install python-twitter
 pip install wordcloud
+pip install twitter
