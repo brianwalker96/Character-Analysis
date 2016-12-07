@@ -11,6 +11,7 @@ import plotly.plotly as plotly
 import plotly.graph_objs as go
 import random
 import plotly.tools as tls
+from collections import defaultdict
 tls.set_credentials_file(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
 plotly.sign_in(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
 
@@ -88,7 +89,8 @@ def plottweetresults(tweetresults, username):
 # plt.show()
 
 def getTweetTimesByTime(times):
-    # get tweets per time of the day
+    """Plots the number of tweets by topic (bar graph), and returns a list of three tuples, with the first tuple being
+    (the top tweeted about topic, a sample tweet from that topic), the second being (the second)..."""
     timeOfTweets = defaultdict(lambda: 0)
     for time in times:
         timeOfTweets[time[2]] += 1
@@ -125,70 +127,35 @@ def plottopicresults(itemresults):
     society = 0
     sports = 0
 
-    arts_samp = []
-    biz_and_econ_samp = []
-    comp_and_tech_samp = []
-    health_samp = []
-    h_and_d_samp = []
-    news_samp = []
-    rec_and_act_samp = []
-    ref_and_ed_samp = []
-    science_samp = []
-    shopping_samp = []
-    society_samp = []
-    sports_samp = []
+    topicDict = defaultdict(lambda : [])
+    for topic, tweet in itemresults:
+        topicDict[topic].append(tweet)
 
     for topic, tweet in itemresults:
         if topic == 'Arts':
             arts += 1
-            arts_samp.append(tweet)
         elif topic == 'Business & Economy':
             biz_and_econ += 1
-            biz_and_econ_samp.append(tweet)
         elif topic == 'Computers & Technology':
             comp_and_tech += 1
-            comp_and_tech_samp.append(tweet)
         elif topic == 'Health':
             health += 1
-            health_samp.append(tweet)
         elif topic == 'Home & Domestic Life':
             h_and_d += 1
-            h_and_d_samp.append(tweet)
         elif topic == 'News':
             news += 1
-            news_samp.append(tweet)
         elif topic == 'Recreation & Activities':
             rec_and_act += 1
-            rec_and_act_samp.append(tweet)
         elif topic == 'Reference & Education':
             ref_and_ed += 1
-            ref_and_ed_samp.append(tweet)
         elif topic == 'Science':
             science += 1
-            science_samp.append(tweet)
         elif topic == 'Shopping':
             shopping += 1
-            shopping_samp.append(tweet)
         elif topic == 'Society':
             society += 1
-            society_samp.append(tweet)
         elif topic == 'Sports':
             sports += 1
-            sports_samp.append(tweet)
-
-    # # Makes sure list with tweet has number of tweets in topic too, for easier recognition for choosing random example tweet
-    # arts_samp.append(arts)
-    # biz_and_econ_samp.append(biz_and_econ)
-    # comp_and_tech_samp.append(comp_and_tech)
-    # health_samp.append(health)
-    # h_and_d_samp.append(h_and_d)
-    # news_samp.append(news)
-    # rec_and_act_samp.append(rec_and_act)
-    # ref_and_ed_samp.append(ref_and_ed)
-    # science_samp.append(science)
-    # shopping_samp.append(shopping)
-    # society_samp.append(society)
-    # sports_samp.append(sports)
 
     # Gets top three topics to shade them differently
 
@@ -200,11 +167,6 @@ def plottopicresults(itemresults):
     most_used_topic = tweets_by_topic.pop()
     second_used_topic = tweets_by_topic.pop()
     third_used_topic = tweets_by_topic.pop()
-
-    top_three = [most_used_topic, second_used_topic, third_used_topic]
-    print most_used_topic
-    print second_used_topic
-    print third_used_topic
 
     tweets_by_topic = [arts, biz_and_econ, comp_and_tech, health, h_and_d, news,
                        rec_and_act, ref_and_ed, science, shopping, society, sports]
@@ -243,25 +205,21 @@ def plottopicresults(itemresults):
     fig = go.Figure(data=data, layout=layout)
     plotly.plot(fig, filename='color-bar')
 
-    sample
-    arts_samp = []
-    biz_and_econ_samp = []
-    comp_and_tech_samp = []
-    health_samp = []
-    h_and_d_samp = []
-    news_samp = []
-    rec_and_act_samp = []
-    ref_and_ed_samp = []
-    science_samp = []
-    shopping_samp = []
-    society_samp = []
-    sports_samp = []
+    top_topic = max(topicDict, key=lambda x: len(topicDict[x]))
+    top_topic_tweet = random.choice(topicDict[top_topic])
+    del topicDict[top_topic]
 
-    #sample_tweets = [sample_from_top_topic, sample_from_sec_topic, sample_from_third_topic]
-    #print sample_tweets
+    second_topic = max(topicDict, key=lambda x: len(topicDict[x]))
+    second_topic_tweet = random.choice(topicDict[second_topic])
+    del topicDict[second_topic]
 
+    third_topic = max(topicDict, key=lambda x: len(topicDict[x]))
+    third_topic_tweet = random.choice(topicDict[third_topic])
+    del topicDict[third_topic]
 
-
+    return [(str(top_topic), str(top_topic_tweet)),
+            (str(second_topic), str(second_topic_tweet)),
+            (str(third_topic), str(third_topic_tweet))]
 
 
 def getsenttweet(tweets):
@@ -273,6 +231,7 @@ def getsenttweet(tweets):
     return data
 
 
+#testing with tweets I made
 plottopicresults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
                   ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
                   ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
