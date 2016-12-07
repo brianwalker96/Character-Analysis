@@ -11,8 +11,8 @@ import plotly.plotly as plotly
 import plotly.graph_objs as go
 import random
 import plotly.tools as tls
-tls.set_credentials_file(username='NickJohnsond660', api_key='d0di49l8DQ14FyYOlieF')
-plotly.sign_in(username='NickJohnsond660', api_key='d0di49l8DQ14FyYOlieF')
+tls.set_credentials_file(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
+plotly.sign_in(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
 
 dAccess = dAccessToken.dAccessToken()
 datum_box = DatumBox(dAccess.api_key)
@@ -21,7 +21,7 @@ import tDataGatherer
 t = tDataGatherer.TDataGatherer()
 t.fetchStatuses('barackobama', 10)
 statuses = t.getFullStatuses()
-tweets = t.getTweets(True, True)
+tweets = t.getTweets()
 times = t.getTimes()
 
 
@@ -108,9 +108,10 @@ def gettweetsentiment(tweets):
     return data
 
 
-def plottopicresults(itemresults, username):
+def plottopicresults(itemresults):
     # assuming I get the itemresults in a tuple
     # bar chart showing top topics
+    global topic_counts, topics, colors_by_topic
     arts = 0
     biz_and_econ = 0
     comp_and_tech = 0
@@ -175,146 +176,38 @@ def plottopicresults(itemresults, username):
             sports += 1
             sports_samp.append(tweet)
 
-    # Makes sure list with tweet has number of tweets in topic too, for easier recognition for choosing random example tweet
-    arts_samp.append(arts)
-    biz_and_econ_samp.append(biz_and_econ)
-    comp_and_tech_samp.append(comp_and_tech)
-    health_samp.append(health)
-    h_and_d_samp.append(h_and_d)
-    news_samp.append(news)
-    rec_and_act_samp.append(rec_and_act)
-    ref_and_ed_samp.append(ref_and_ed)
-    science_samp.append(science)
-    shopping_samp.append(shopping)
-    society_samp.append(society)
-    sports_samp.append(sports)
+    # # Makes sure list with tweet has number of tweets in topic too, for easier recognition for choosing random example tweet
+    # arts_samp.append(arts)
+    # biz_and_econ_samp.append(biz_and_econ)
+    # comp_and_tech_samp.append(comp_and_tech)
+    # health_samp.append(health)
+    # h_and_d_samp.append(h_and_d)
+    # news_samp.append(news)
+    # rec_and_act_samp.append(rec_and_act)
+    # ref_and_ed_samp.append(ref_and_ed)
+    # science_samp.append(science)
+    # shopping_samp.append(shopping)
+    # society_samp.append(society)
+    # sports_samp.append(sports)
 
     # Gets top three topics to shade them differently
+
     tweets_by_topic = [arts, biz_and_econ, comp_and_tech, health, h_and_d, news,
                        rec_and_act, ref_and_ed, science, shopping, society, sports]
-    most_used_topic = max(tweets_by_topic)
 
-    # Find out which topic has the max number of tweets in it, and gets a sample from said topic
-    if most_used_topic in arts_samp:
-        arts_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(arts_samp)
-    elif most_used_topic in biz_and_econ_samp:
-        biz_and_econ_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(biz_and_econ_samp)
-    elif most_used_topic in comp_and_tech_samp:
-        comp_and_tech_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(comp_and_tech_samp)
-    elif most_used_topic in health_samp:
-        health_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(health_samp)
-    elif most_used_topic in h_and_d_samp:
-        h_and_d_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(h_and_d_samp)
-    elif most_used_topic in news_samp:
-        news_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(news_samp)
-    elif most_used_topic in rec_and_act_samp:
-        rec_and_act_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(rec_and_act_samp)
-    elif most_used_topic in ref_and_ed_samp:
-        ref_and_ed_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(ref_and_ed_samp)
-    elif most_used_topic in science_samp:
-        science_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(science_samp)
-    elif most_used_topic in shopping_samp:
-        shopping_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(shopping_samp)
-    elif most_used_topic in society_samp:
-        society_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(society_samp)
-    elif most_used_topic in sports_samp:
-        sports_samp.pop(most_used_topic)
-        sample_from_top_topic = random.choice(sports_samp)
+    tweets_by_topic = sorted(tweets_by_topic)
 
-    tweets_by_topic.pop(most_used_topic)
+    most_used_topic = tweets_by_topic.pop()
+    second_used_topic = tweets_by_topic.pop()
+    third_used_topic = tweets_by_topic.pop()
 
-    second_used_topic = max(tweets_by_topic)
+    top_three = [most_used_topic, second_used_topic, third_used_topic]
+    print most_used_topic
+    print second_used_topic
+    print third_used_topic
 
-    if second_used_topic in arts_samp:
-        arts_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(arts_samp)
-    elif second_used_topic in biz_and_econ_samp:
-        biz_and_econ_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(biz_and_econ_samp)
-    elif second_used_topic in comp_and_tech_samp:
-        comp_and_tech_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(comp_and_tech_samp)
-    elif second_used_topic in health_samp:
-        health_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(health_samp)
-    elif second_used_topic in h_and_d_samp:
-        h_and_d_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(h_and_d_samp)
-    elif second_used_topic in news_samp:
-        news_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(news_samp)
-    elif second_used_topic in rec_and_act_samp:
-        rec_and_act_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(rec_and_act_samp)
-    elif second_used_topic in ref_and_ed_samp:
-        ref_and_ed_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(ref_and_ed_samp)
-    elif second_used_topic in science_samp:
-        science_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(science_samp)
-    elif second_used_topic in shopping_samp:
-        shopping_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(shopping_samp)
-    elif second_used_topic in society_samp:
-        society_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(society_samp)
-    elif second_used_topic in sports_samp:
-        sports_samp.pop(second_used_topic)
-        sample_from_sec_topic = random.choice(sports_samp)
-
-    tweets_by_topic.pop(second_used_topic)
-
-    third_used_topic = max(tweets_by_topic)
-
-    if third_used_topic in arts_samp:
-        arts_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(arts_samp)
-    elif third_used_topic in biz_and_econ_samp:
-        biz_and_econ_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(biz_and_econ_samp)
-    elif third_used_topic in comp_and_tech_samp:
-        comp_and_tech_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(comp_and_tech_samp)
-    elif third_used_topic in health_samp:
-        health_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(health_samp)
-    elif third_used_topic in h_and_d_samp:
-        h_and_d_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(h_and_d_samp)
-    elif third_used_topic in news_samp:
-        news_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(news_samp)
-    elif third_used_topic in rec_and_act_samp:
-        rec_and_act_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(rec_and_act_samp)
-    elif third_used_topic in ref_and_ed_samp:
-        ref_and_ed_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(ref_and_ed_samp)
-    elif third_used_topic in science_samp:
-        science_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(science_samp)
-    elif third_used_topic in shopping_samp:
-        shopping_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(shopping_samp)
-    elif third_used_topic in society_samp:
-        society_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(society_samp)
-    elif third_used_topic in sports_samp:
-        sports_samp.pop(third_used_topic)
-        sample_from_third_topic = random.choice(sports_samp)
-
-    tweets_by_topic.pop(third_used_topic)
+    tweets_by_topic = [arts, biz_and_econ, comp_and_tech, health, h_and_d, news,
+                       rec_and_act, ref_and_ed, science, shopping, society, sports]
 
 
     # Colors topics based on their use
@@ -325,33 +218,51 @@ def plottopicresults(itemresults, username):
         elif topic == second_used_topic:
             colors_by_topic.append('rgba(238, 87, 85, 0.8)')
         elif topic == third_used_topic:
-            colors_by_topic.append('rgbs(231, 157, 155, 0.6)')
+            colors_by_topic.append('rgba(231, 157, 155, 0.8)')
         else:
-            colors_by_topic.append('rgbs(204, 204, 204, 0.5)')
+            colors_by_topic.append('rgba(204, 204, 204, 0.5')
 
     topics = ['Arts', 'Business & Economy', 'Computers & Technology',
               'Health', 'Home & Domestic Life', 'News', 'Recreation & Activities',
               'Reference & Education', 'Science', 'Shopping', 'Society', 'Sports']
     topic_counts = [arts, biz_and_econ, comp_and_tech, health, h_and_d, news,
                     rec_and_act, ref_and_ed, science, shopping, society, sports]
-
     trace0 = go.Bar(
-        x=topics, y=topic_counts,
-        marker=dict(
-            color=colors_by_topic),
-    )
+            x=topics, y=topic_counts,
+            marker=dict(
+                color=colors_by_topic),
+        )
 
     data = [trace0]
     layout = go.Layout(
-        title='Top Three Tweet Topics for' + str(username),
-        xaxis=dict(tickangle=-45)
-    )
+            title='Top Three Tweet Topics for' + 'Test',
+            xaxis=dict(tickangle=-45),
+            margin=go.Margin(b=135)
+        )
 
     fig = go.Figure(data=data, layout=layout)
-    plotly.iplot(fig, filename='color-bar')
+    plotly.plot(fig, filename='color-bar')
+
+    sample
+    arts_samp = []
+    biz_and_econ_samp = []
+    comp_and_tech_samp = []
+    health_samp = []
+    h_and_d_samp = []
+    news_samp = []
+    rec_and_act_samp = []
+    ref_and_ed_samp = []
+    science_samp = []
+    shopping_samp = []
+    society_samp = []
+    sports_samp = []
+
+    #sample_tweets = [sample_from_top_topic, sample_from_sec_topic, sample_from_third_topic]
+    #print sample_tweets
 
 
-    sample_tweets = [sample_from_top_topic, sample_from_sec_topic, sample_from_third_topic]
+
+
 
 def getsenttweet(tweets):
     """gives you a list of lists where first element is the topic and second is the tweet for every tweet"""
@@ -360,6 +271,11 @@ def getsenttweet(tweets):
         topic = datum_box.topic_classification(tweet)
         data.append([topic, tweet])
     return data
+
+
+plottopicresults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
+                  ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
+                  ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
 
 
 # strippedtweets = getStrippedTweets(tweets, True, True, True, True)
