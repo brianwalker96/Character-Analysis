@@ -7,13 +7,8 @@ import re
 from wordcloud import WordCloud
 import PIL
 from DatumBox import DatumBox
-import dAccessToken
 import pdfWriter
 import sentimentclassification
-
-#dAccess = dAccessToken.dAccessToken()
-#datum_box = DatumBox(dAccess.api_key)
-#print datum_box.twitter_sentiment_analysis(tweets[0])
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newTweets = []
@@ -37,8 +32,6 @@ def stripString(s, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldSt
 	s = re.sub(r'RT', '', s, flags=re.MULTILINE)
 	return s.lower()
 
-#print datum_box.twitter_sentiment_analysis(strippedTweets[0])
-
 def getWordBag(strippedTweets, shouldSort):
 	wordCounts = defaultdict(lambda: 0)
 	for tweet in strippedTweets:
@@ -49,8 +42,6 @@ def getWordBag(strippedTweets, shouldSort):
 		return sorted(wordCounts.iteritems(), key= lambda (k,v) : v, reverse= True)
 	else:
 		return wordCounts
-
-#print getWordBag(strippedTweets, True)
 
 def graphWordBag(text):
 	wordcloud = WordCloud().generate(text)
@@ -87,8 +78,6 @@ def plotTweetTimesByDayTime(times):
 	ax.set_xticks((0, 24, 48, 72, 96, 120, 144))
 	plt.show()
 
-#plotTweetTimesByDayTime(times)
-
 def plotTweetTimesByTime(times):
 	timeOfTweets = defaultdict(lambda:0)
 	for time in times:
@@ -111,10 +100,9 @@ def generateReport (name, handle):
 	tweets = t.getTweets(True, False)
 	times = t.getTimes()
 	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-	#dAccess = dAccessToken.dAccessToken()
-	#datumBox = DatumBox(dAccess.api_key)
-	#tweetsentiment = sentimentclassification.gettweetsentiment(datumBox, strippedTweets)
-	#sentimentclassifcation.plottweetresults(tweetsentiment, 'barackobama')
+	s = sentimentclassification.SentimentClassifier(True)
+	tweetSentiment = s.gettweetsentiment()
+	s.plotTweetResults(tweetsentiment)
 	fullText = getFullText(strippedTweets)
 	graphWordBag(fullText)
 	plotTweetTimesByTime(times)
