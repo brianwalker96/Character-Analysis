@@ -93,6 +93,7 @@ def plotTweetTimesByTime(times):
 	ax.set_xticks((0, 3, 6, 9, 12, 15, 18, 21))
 	plt.savefig("byTime.png")
 
+
 def generateReport (name, handle):
 	t = tDataGatherer.TDataGatherer()
 	t.fetchStatuses(handle, 100)
@@ -100,13 +101,13 @@ def generateReport (name, handle):
 	tweets = t.getTweets(True, False)
 	times = t.getTimes()
 	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-	s = sentimentclassification.SentimentClassifier(True)
-	tweetSentiment = s.gettweetsentiment()
-	s.plotTweetResults(tweetsentiment)
+	s = sentimentclassification.SentimentClassifier(strippedTweets)
+	#tweetSentiment = s.getTweetSentiment()
+	#s.plotTweetResults(tweetsentiment)
 	fullText = getFullText(strippedTweets)
 	graphWordBag(fullText)
 	plotTweetTimesByTime(times)
 	pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
-	pdfW.generatePDF()
+	#pdfW.generatePDF()
 
-#generateReport("Mike Rhoades", "@CoachRhoades")
+generateReport("Mike Rhoades", "@CoachRhoades")
