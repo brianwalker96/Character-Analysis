@@ -9,6 +9,7 @@ import PIL
 from DatumBox import DatumBox
 import pdfWriter
 import sentimentclassification
+import urllib
 
 def getStrippedTweets(tweets, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newTweets = []
@@ -93,14 +94,20 @@ def plotTweetTimesByTime(times):
 	ax.set_xticks((0, 3, 6, 9, 12, 15, 18, 21))
 	plt.savefig("byTime.png")
 
+<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
 
 def generateReport (name, handle):
+=======
+def generateReport (handle):
+>>>>>>> git correction, pdf updates
 	t = tDataGatherer.TDataGatherer()
-	t.fetchStatuses(handle, 100)
+	userInfo = t.getUser(handle) #name, bio, profPic
+	t.fetchStatuses(handle, 10)
 	statuses = t.getFullStatuses()
 	tweets = t.getTweets(True, False)
 	times = t.getTimes()
 	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
+<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
 	s = sentimentclassification.SentimentClassifier(strippedTweets)
 	#tweetSentiment = s.getTweetSentiment()
 	#s.plotTweetResults(tweetsentiment)
@@ -111,3 +118,16 @@ def generateReport (name, handle):
 	#pdfW.generatePDF()
 
 generateReport("Mike Rhoades", "@CoachRhoades")
+=======
+	s = sentimentclassification.SentimentClassifier(tweets)
+	tweetSentiment = s.getTweetSentiment()
+	#s.plotTweetResults(tweetSentiment)
+	topThree = s.plotTopicResults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
+	fullText = getFullText(strippedTweets)
+	graphWordBag(fullText)
+	plotTweetTimesByTime(times)
+	pdfW = pdfWriter.pdfWriter(userInfo[0], handle, userInfo[1], topThree)
+	pdfW.generatePDF()
+
+generateReport("@thebwalk")
+>>>>>>> git correction, pdf updates

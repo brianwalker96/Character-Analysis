@@ -1,6 +1,7 @@
 import twitter
 import tAccessToken #STORE AS LOCAL COPY - NOT ON GITHUB. NEVER COMMIT THIS
 import string
+import urllib
 
 class TDataGatherer:
 	def __init__(self):
@@ -12,9 +13,13 @@ class TDataGatherer:
                 	  access_token_secret= self.key.access_token_secret)
 		#NOTE ONLY 100 API CALLS PER HOUR
 
+	def getUser(self, username):
+		self.user = self.api.GetUser(screen_name = username)
+		urllib.urlretrieve(self.user.profile_image_url.replace("_normal.jpg", ".jpg"), "prof-pic.jpg")
+		return [self.user.name, self.user.description]
+
 	def fetchStatuses(self, username, maxCount): #maxCount max is 3200
 		#Just get statuses here, don't process at all
-		self.user = self.api.GetUser(screen_name = username)
 		batchCount = min(200, maxCount) #200 fetch limit
 		self.statuses = self.api.GetUserTimeline(screen_name = username, count = batchCount)
 		fetchCount = batchCount
