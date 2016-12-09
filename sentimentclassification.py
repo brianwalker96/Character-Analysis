@@ -4,13 +4,9 @@ import string
 import dAccessToken
 import tAccessToken
 import re
-dAccess = dAccessToken.dAccessToken()
-datum_box = DatumBox(dAccess.api_key)
 from plotly import plotly
 import plotly.plotly as plotly
 import plotly.tools as tls
-tls.set_credentials_file(username='abhious', api_key='1Tdwg7pmZUvqlMJhNEgD')
-plotly.sign_in(username='abhious',api_key='1Tdwg7pmZUvqlMJhNEgD')
 import tDataGatherer
 import plotly.graph_objs as go
 import random
@@ -19,10 +15,6 @@ import plotly.graph_objs as go
 import plotly.tools as tls
 from collections import defaultdict
 
-<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
-=======
-
->>>>>>> git correction, pdf updates
 class SentimentClassifier:
     def __init__ (self, tweets):
         dAccess = dAccessToken.dAccessToken()
@@ -197,12 +189,7 @@ class SentimentClassifier:
             data.append([topic, tweet])
         return data
 
-<<<<<<< HEAD
-<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
-    def plottweetresults(self, tweetresults,username):
-=======
-    def plotTweetResults(self, tweetresults,username):
->>>>>>> added saving plots from plotly
+    def plotTweetResults(self, tweetresults):
         #assuming I get the tweetresults in a list 
         #pie chart showing percentages of positive,neutral,negative
         positive = 0
@@ -215,9 +202,9 @@ class SentimentClassifier:
                 negative += 1
             else:
                 neutral += 1                
-        fig = { 'data':[{'labels': ['Positive','Negative','Neutral'], 'values': [positive, negative, neutral], 'type':'pie', 'marker': {'colors':['rgb(0,0,255)','rgb(232,17,15)','rgb(144,156,156)']},}], 'layout':{'title':str(username) + ' Positivity Analysis'}}
+        fig = { 'data':[{'labels': ['Positive','Negative','Neutral'], 'values': [positive, negative, neutral], 'type':'pie', 'marker': {'colors':['rgb(0,0,255)','rgb(232,17,15)','rgb(144,156,156)']},}], 'layout':{}}
         plotly.plot(fig)
-        py.image.save_as(fig, filename='PositivityAnalysis.jpg')           
+        plotly.image.save_as(fig, filename='PositivityAnalysis.png')           
 
     
 
@@ -249,7 +236,7 @@ class SentimentClassifier:
                   'Jul':{'positive':0,'negative':0,'neutral':0}, 'Aug':{'positive':0,'negative':0,'neutral':0}, 'Sep':{'positive':0,'negative':0,'neutral':0},
                   'Oct':{'positive':0,'negative':0,'neutral':0}, 'Nov':{'positive':0,'negative':0,'neutral':0}, 'Dec':{'positive':0,'negative':0,'neutral':0}}
         for tweet,time in tweettimes:
-            sentiment = datum_box.twitter_sentiment_analysis(tweet)
+            sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
             month = time[3]
             months[month][sentiment] += 1
         pos = {}
@@ -280,13 +267,5 @@ class SentimentClassifier:
         layout = dict(title = 'Tweet Sentiment over Time',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Sentiment'),)
         fig = dict(data=data,layout=layout)
         plotly.plot(fig)
-<<<<<<< HEAD
-=======
->>>>>>> git correction, pdf updates
+        plotly.image.save_as(fig, filename='SentimentOverTime.png')
 
-#plotTopicResults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
-#    ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
-#                      ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
-=======
-        py.image.save_as(fig, filename='SentimentOverTime.jpg')
->>>>>>> added saving plots from plotly

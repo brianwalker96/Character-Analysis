@@ -104,12 +104,7 @@ def plotTweetTimesByTime(times,user):
         fig = dict(data=data,layout=layout)
         plotly.plot(fig)
 
-<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
-
-def generateReport (name, handle):
-=======
 def generateReport (handle):
->>>>>>> git correction, pdf updates
 	t = tDataGatherer.TDataGatherer()
 	userInfo = t.getUser(handle) #name, bio, profPic
 	t.fetchStatuses(handle, 10)
@@ -117,33 +112,20 @@ def generateReport (handle):
 	tweets = t.getTweets(True, False)
 	times = t.getTimes()
 	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
-<<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
 	s = sentimentclassification.SentimentClassifier(strippedTweets)
 	tweetSentiment = s.getTweetSentiment()
-	s.plotTweetResults(tweetSentiment,name)
+	s.plotTweetResults(tweetSentiment)
 	s.happinesstimes(strippedTweets,times)
-	plotTweetTimesByTime(times,name)
-	#fullText = getFullText(strippedTweets)
-	#graphWordBag(fullText)
-	#plotTweetTimesByTime(times)
-	#pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
-	#pdfW.generatePDF()
-
-generateReport("Mike Rhoades", "@CoachRhoades")
-<<<<<<< HEAD
-=======
-	s = sentimentclassification.SentimentClassifier(tweets)
-	tweetSentiment = s.getTweetSentiment()
-	#s.plotTweetResults(tweetSentiment)
 	topThree = s.plotTopicResults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
 	fullText = getFullText(strippedTweets)
 	graphWordBag(fullText)
 	plotTweetTimesByTime(times)
 	pdfW = pdfWriter.pdfWriter(userInfo[0], handle, userInfo[1], topThree)
 	pdfW.generatePDF()
+	
 
-generateReport("@thebwalk")
->>>>>>> git correction, pdf updates
-=======
+generateReport("@CoachRhoades")
 
->>>>>>> added saving plots from plotly
+	
+
+
