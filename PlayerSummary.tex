@@ -1,11 +1,27 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx}
+\usepackage{subfig}
+\usepackage[margin=0.5in,footskip=0.25in]{geometry}
+\pagenumbering{gobble}
 \begin{document}
-\huge \noindent Mike Rhoades\\
-\large @CoachRhoades\\
-\small This is a sample bio\\
-\huge \textbf{Words}\\
-\includegraphics[scale=.4, trim={0, 0, 0, 0}]{wordcloud.png}\\
-\huge \textbf{Time}\\
-\includegraphics[scale=.4, trim={0, 0, 0, 0}]{byTime.png}
+\begin{figure}
+\begin{minipage}{0.3\textwidth}
+\includegraphics[width=0.8\linewidth]{prof-pic.jpg}
+\end{minipage}
+\hfill
+\begin{minipage}{0.7\textwidth}\huge \noindent Brian Walker\\
+\large @thebwalk\\
+\large This is my bio\\
+\end{minipage}
+\subfloat[Words Used]{\includegraphics[width=0.3\textwidth]{wordcloud.png}}
+\subfloat[Time of Day]{\includegraphics[width=0.3\textwidth]{byTime.png}}
+\subfloat[Words Used]{\includegraphics[width=0.3\textwidth]{wordcloud.png}}
+\hfill
+\subfloat[Time of Day]{\includegraphics[width=0.3\textwidth]{byTime.png}}
+\subfloat[Words Used]{\includegraphics[width=0.3\textwidth]{wordcloud.png}}
+\subfloat[Time of Day]{\includegraphics[width=0.3\textwidth]{byTime.png}}
+\hfill
+\subfloat[Time of Day]{\includegraphics[width=0.45\textwidth]{byTime.png}}
+\subfloat[Words Used]{\includegraphics[width=0.45\textwidth]{wordcloud.png}}
+\end{figure}
 \end{document}
