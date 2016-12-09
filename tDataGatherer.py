@@ -50,7 +50,8 @@ class TDataGatherer:
 		nextDay = {"Sun":"Mon", "Mon":"Tue", "Tue":"Wed", "Wed":"Thu", "Thu":"Fri", "Fri":"Sat", "Sat":"Sun"}
 		for status in self.statuses:
 			year = int(status.created_at[26:30])
+			month = status.created_at[4:7]
 			day = status.created_at[0:3]
 			hour = int(status.created_at[11:13])
-			timeOfTweets.append((year,day, hour))
+			timeOfTweets.append((year,day, hour, month))
 		return timeOfTweets

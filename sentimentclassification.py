@@ -197,8 +197,12 @@ class SentimentClassifier:
             data.append([topic, tweet])
         return data
 
+<<<<<<< HEAD
 <<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
     def plottweetresults(self, tweetresults,username):
+=======
+    def plotTweetResults(self, tweetresults,username):
+>>>>>>> added saving plots from plotly
         #assuming I get the tweetresults in a list 
         #pie chart showing percentages of positive,neutral,negative
         positive = 0
@@ -211,22 +215,14 @@ class SentimentClassifier:
                 negative += 1
             else:
                 neutral += 1                
-        fig = { 'data':[{'labels': ['Positive','Negative','Neutral'], 'values': [positive, negative, neutral], 'type':'pie', 'marker': {'colors':['rgb(56,75,126)','rgb(18,36,37)','rgb(34,53,101)']},}], 'layout':{'title':str(username) + ' Positivity Analysis'}}
+        fig = { 'data':[{'labels': ['Positive','Negative','Neutral'], 'values': [positive, negative, neutral], 'type':'pie', 'marker': {'colors':['rgb(0,0,255)','rgb(232,17,15)','rgb(144,156,156)']},}], 'layout':{'title':str(username) + ' Positivity Analysis'}}
         plotly.plot(fig)
-                   
+        py.image.save_as(fig, filename='PositivityAnalysis.jpg')           
 
-# def getTweetTimesByTime(times):
-#         #get tweets per time of the day
-# 	timeOfTweets = defaultdict(lambda:0)
-# 	for time in times:
-# 		timeOfTweets[time[2]] += 1
-# 	times = range(24)
-# 	numbers = []
-# 	for time in times:
-# 		numbers.append(timeOfTweets[time])
-# 	return [times,numbers]
+    
 
-
+    
+    
     def getTweetSentiment(self):
         #assuming I get tweets in a list format
         data = []
@@ -284,9 +280,13 @@ class SentimentClassifier:
         layout = dict(title = 'Tweet Sentiment over Time',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Sentiment'),)
         fig = dict(data=data,layout=layout)
         plotly.plot(fig)
+<<<<<<< HEAD
 =======
 >>>>>>> git correction, pdf updates
 
 #plotTopicResults([('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
 #    ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'), ('Arts', 'I love museums so much'), ('Business & Economy', 'Economic collapse coming'),
 #                      ('Arts', 'I love museums so much'), ('Arts', 'Museums rock'), ('Sports', 'Go LeBron'), ('Sports', 'Go Lebron!'), ('Home & Domestic Life', 'Momma')])
+=======
+        py.image.save_as(fig, filename='SentimentOverTime.jpg')
+>>>>>>> added saving plots from plotly

@@ -1,6 +1,10 @@
 import tDataGatherer
 from collections import defaultdict
-import matplotlib.pyplot as plt
+import plotly.plotly as plotly
+import plotly.graph_objs as go
+import plotly.tools as tls
+tls.set_credentials_file(username='abhious', api_key='1Tdwg7pmZUvqlMJhNEgD')
+plotly.sign_in(username='abhious',api_key='1Tdwg7pmZUvqlMJhNEgD')
 import unicodedata
 import string
 import re
@@ -79,20 +83,26 @@ def plotTweetTimesByDayTime(times):
 	ax.set_xticks((0, 24, 48, 72, 96, 120, 144))
 	plt.show()
 
-def plotTweetTimesByTime(times):
-	timeOfTweets = defaultdict(lambda:0)
-	for time in times:
-		timeOfTweets[time[2]] += 1
-	times = range(24)
-	numbers = []
-	for time in times:
-		numbers.append(timeOfTweets[time])
-	fig, ax = plt.subplots()
-	width = 1
-	rects1 = ax.bar(times,numbers, width)
-	ax.set_xticklabels([0, 3, 6, 9, 12, 3, 6, 9])
-	ax.set_xticks((0, 3, 6, 9, 12, 15, 18, 21))
-	plt.savefig("byTime.png")
+def plotTweetTimesByTime(times,user):
+        #get tweets per time of the day
+        
+        tdict = {}
+        for time in times:
+                if int(time[2]) in tdict:
+                        tdict[int(time[2])] += 1
+                else:
+                        tdict[int(time[2])] = 0
+        
+        numbers = []
+        f = tdict.keys()
+        for item in f:
+                numbers.append(tdict[item])
+        trace1 = go.Scatter( x = f, y = numbers, name = 'Tweets', line = dict(color = ('rgb(205,12,24)'),
+                            width = 4))
+        data = [trace1]
+        layout = dict(title = 'Tweet Rate per Hour for ' + user,xaxis = dict(title = 'Time of Day'),yaxis = dict(title = 'Tweet Count'),)
+        fig = dict(data=data,layout=layout)
+        plotly.plot(fig)
 
 <<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
 
@@ -109,15 +119,18 @@ def generateReport (handle):
 	strippedTweets = getStrippedTweets(tweets, True, True, True, True)
 <<<<<<< eee6b85c6b395407f740e014f829959dc239be5a
 	s = sentimentclassification.SentimentClassifier(strippedTweets)
-	#tweetSentiment = s.getTweetSentiment()
-	#s.plotTweetResults(tweetsentiment)
-	fullText = getFullText(strippedTweets)
-	graphWordBag(fullText)
-	plotTweetTimesByTime(times)
-	pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
+	tweetSentiment = s.getTweetSentiment()
+	s.plotTweetResults(tweetSentiment,name)
+	s.happinesstimes(strippedTweets,times)
+	plotTweetTimesByTime(times,name)
+	#fullText = getFullText(strippedTweets)
+	#graphWordBag(fullText)
+	#plotTweetTimesByTime(times)
+	#pdfW = pdfWriter.pdfWriter(name, handle, "This is a sample bio")
 	#pdfW.generatePDF()
 
 generateReport("Mike Rhoades", "@CoachRhoades")
+<<<<<<< HEAD
 =======
 	s = sentimentclassification.SentimentClassifier(tweets)
 	tweetSentiment = s.getTweetSentiment()
@@ -131,3 +144,6 @@ generateReport("Mike Rhoades", "@CoachRhoades")
 
 generateReport("@thebwalk")
 >>>>>>> git correction, pdf updates
+=======
+
+>>>>>>> added saving plots from plotly
