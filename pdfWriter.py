@@ -1,13 +1,15 @@
 import subprocess 
 
-class pdfWriter:
+class PDFWriter:
     def __init__ (self, name, handle, bio, topThree):
+        print "PDFWriter - intializing"
         self.name = name
         self.handle = handle
         self.bio = bio
         self.topThree = topThree
 
     def generatePDF(self) :
+        print "PDFWriter - generating PDF"
         # lines = [
         # "\\documentclass[12pt]{article}",
         # "\\usepackage{graphicx}",
@@ -25,14 +27,12 @@ class pdfWriter:
         # "\\large " + self.topThree[2][0].replace("&", "\\&") + " : \\small " + self.topThree[2][1] + "\\\\",
         # "\\end{document}"
         # ]
-        # with open('PlayerSummary.tex', 'w+') as f:
-        #     for line in lines:
-        #         f.write(line + "\n")
+        # with open('PlayerSummaryTest.tex', 'w+') as f:
+        #      for line in lines:
+        #          f.write(line + "\n")
 
         cmd = ['pdflatex', '-interaction', 'nonstopmode', 'PlayerSummary.tex']
-        proc = subprocess.Popen(cmd)
+        proc = subprocess.Popen(cmd, shell=True)
         proc.communicate()
         subprocess.Popen(["PlayerSummary.pdf"],shell=True)
-
-
 

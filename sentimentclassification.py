@@ -16,63 +16,109 @@ import plotly.tools as tls
 from collections import defaultdict
 
 class SentimentClassifier:
-    def __init__ (self, tweets):
+    def __init__ (self, tweets, times):
+        print "SentimentClassifier - initializing"
         dAccess = dAccessToken.dAccessToken()
         self.datumBox = DatumBox(dAccess.api_key)
         self.tweets = tweets
-        tls.set_credentials_file(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
-        plotly.sign_in(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
+        self.times = times
+        self.colorMapping = {"positive": 'rgb(0, 0, 255)', "negative": 'rgb(232, 17, 15)', "neutral": 'rgb(156, 156, 156)'}
+        #tls.set_credentials_file(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
+        #plotly.sign_in(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
+        #Alternate Credentials
+        tls.set_credentials_file(username='abhious', api_key='1Tdwg7pmZUvqlMJhNEgD')
+        plotly.sign_in(username='abhious',api_key='1Tdwg7pmZUvqlMJhNEgD')
 
-    def plotTweetResults(self, tweetResults):
-        #assuming I get the tweetresults in a list 
-        #pie chart showing percentages of positive,neutral,negative
-        positive = 0
-        negative = 0
-        neutral = 0
-        for item in tweetResults:
-            if item == 'positive':
-                positive += 1
-            elif item == 'negative':
-                negative += 1
-            else:
-                neutral += 1
+    def getTweetSentiment(self, testing, shouldPlot):
+        print "SentimentClassifier - determining sentiment"
+        self.sentiments = []
+        for tweet in self.tweets:
+            if len(self.sentiments) % 25 == 0:
+                print "SentimentClasiiffier - determining sentiment " + str(len(self.sentiments))
+            sentiment = ""
+            if testing:
+                sentiment = random.choice(["positive", "negative", "neutral"])
+            else :
+                sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
+            self.sentiments.append(sentiment)
+        if shouldPlot:
+            self.plotSentimentPie()
+
+    def plotSentimentPie(self):
+        print "SentimentClassifier - sentiment pie chart"
+        numOfSent = defaultdict(lambda: 0)
+        labels = []
+        values = []
+        colors = []
+        for sent in self.sentiments:
+            numOfSent[sent] += 1
+        for sent in numOfSent:
+            labels.append(sent)
+            values.append(numOfSent[sent])
+            colors.append(self.colorMapping[sent])
         fig = {
-            'data': [{'labels': ['Positive', 'Negative', 'Neutral'],
-                      'values': [positive, negative, neutral],
+            'data': [{'labels': labels,
+                      'values': values,
                       'type': 'pie',
-                      'marker': {'colors': ['rgb(0, 0, 255)',
-                                            'rgb(232, 17, 15)',
-                                            'rgb(156, 156, 156)']},
+                      'marker': {'colors': colors},
                       }],
             'layout': {'title': ' Positivity Analysis'}
         }
-        plotly.plot(fig)            
-
-    # def getTweetTimesByTime(times):
-    #         #get tweets per time of the day
-    # 	timeOfTweets = defaultdict(lambda:0)
-    # 	for time in times:
-    # 		timeOfTweets[time[2]] += 1
-    # 	times = range(24)
-    # 	numbers = []
-    # 	for time in times:
-    # 		numbers.append(timeOfTweets[time])
-    # 	return [times,numbers]
-
-
-    def getTweetSentiment(self):
-        #assuming I get tweets in a list format
-        data = []
+        plotly.image.save_as(fig, filename='sentiment_pie_chart.png')           
+    
+    def getTweetTopics(self, testing, shouldPlot):
+        print "SentimentClassifier - determining tweets' topic"
+        self.topics = []
         for tweet in self.tweets:
-            # print tweet
-            ##sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
-            sentiment = random.choice(["positive", "negative", "neutral"])
-            data.append(sentiment)
-        return data
+            topic = ""
+            if testing:
+                topic = random.choice(["Arts", 'Business & Economy', 'Sports', 'Home & Domestic Life'])
+            else : 
+                topic = datum_box.topic_classification(tweet)
+            self.topics.append(topic) 
+        if shouldPlot:
+            return self.plotTopicResults() 
 
-    def plotTopicResults(self, itemresults):
-        # assuming I get the itemresults in a tuple
+    def sentimentOverTime(self):
+        #BUG - edge case - going over multiple years of time
+        print 'SentimentClassifier - sentiment over time graph'
+        sentTimes = zip(self.sentiments, self.times)
+        monthCts = defaultdict(lambda: defaultdict(lambda: 0))
+        for sent,time in sentTimes:
+            monthCts[time[3]][sent] += 1
+        months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+        pos = {}
+        neg = {}
+        neu = {}
+        for month in months:
+            pos[month] = monthCts[month]['positive']
+            neg[month] = monthCts[month]['negative']
+            neu[month] = monthCts[month]['neutral']
+        p = []
+        n = []
+        nu = []
+        for item in months:
+            p.append(pos[item])
+            n.append(neg[item])
+            nu.append(neu[item])
+
+        trace1 = go.Scatter( x = months, y = p, name = 'Positive', line = dict(color = ('rgb(205,12,24)'),
+                            width = 4))
+        trace2 = go.Scatter(x = months, y = n, name = 'Negative', line = dict(color = ('rgb(22,96,167)'),
+                            width = 4))
+        trace3 = go.Scatter(x=months ,y = nu, name = 'Neutral', line = dict(color = ('rgb(0,0,0)'),
+                            width = 4))
+        
+        data = [trace1, trace2, trace3]
+        layout = dict(title = 'Tweet Sentiment over Time',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Sentiment'),)
+        fig = dict(data=data,layout=layout)
+        plotly.image.save_as(fig, filename='sentiment_over_time.png')
+
+    def plotTopicResults(self):
+        print "SentimentClassifier - topic bar graph"
         # bar chart showing top topics
+        topicTweet = zip(self.topics, self.tweets)
+
         global topic_counts, topics, colors_by_topic
         arts = 0
         biz_and_econ = 0
@@ -88,10 +134,10 @@ class SentimentClassifier:
         sports = 0
 
         topicDict = defaultdict(lambda : [])
-        for topic, tweet in itemresults:
+        for topic, tweet in topicTweet:
             topicDict[topic].append(tweet)
 
-        for topic, tweet in itemresults:
+        for topic, tweet in topicTweet:
             if topic == 'Arts':
                 arts += 1
             elif topic == 'Business & Economy':
@@ -163,7 +209,7 @@ class SentimentClassifier:
             )
 
         fig = go.Figure(data=data, layout=layout)
-        #plotly.plot(fig, filename='color-bar')
+        plotly.image.save_as(fig, filename='topic_bar.png')
 
         top_topic = max(topicDict, key=lambda x: len(topicDict[x]))
         top_topic_tweet = random.choice(topicDict[top_topic])
@@ -181,91 +227,8 @@ class SentimentClassifier:
                 (str(second_topic), str(second_topic_tweet)),
                 (str(third_topic), str(third_topic_tweet))]
 
-    def getSentTweet(tweets):
-        """gives you a list of lists where first element is the topic and second is the tweet for every tweet"""
-        data = []
-        for tweet in tweets:
-            topic = datum_box.topic_classification(tweet)
-            data.append([topic, tweet])
-        return data
-
-    def plotTweetResults(self, tweetresults):
-        #assuming I get the tweetresults in a list 
-        #pie chart showing percentages of positive,neutral,negative
-        positive = 0
-        negative = 0
-        neutral = 0
-        for item in tweetresults:
-            if item == 'positive':
-                positive += 1
-            elif item == 'negative':
-                negative += 1
-            else:
-                neutral += 1                
-        fig = { 'data':[{'labels': ['Positive','Negative','Neutral'], 'values': [positive, negative, neutral], 'type':'pie', 'marker': {'colors':['rgb(0,0,255)','rgb(232,17,15)','rgb(144,156,156)']},}], 'layout':{}}
-        plotly.plot(fig)
-        plotly.image.save_as(fig, filename='PositivityAnalysis.png')           
-
     
 
+
     
-    
-    def getTweetSentiment(self):
-        #assuming I get tweets in a list format
-        data = []
-        for tweet in self.tweets:
-            # print tweet
-            sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
-            data.append(sentiment)
-        return data
-
-    def getsenttweet(self, tweets):
-        #gives you a list of lists where first element is the topic and the second is the tweet for every tweet
-        #should not be in the class, should be in different class
-        data = []
-        for tweet in tweets:
-            topic = datum_box.topic_classification(tweet)
-            data.append([topic,tweet])
-        return data
-
-    def happinesstimes(self, tweets,times):
-        #assuming input of stripped tweets and times, plots tweet history over time 
-        tweettimes = zip(tweets,times)
-        months = {'Jan':{'positive':0,'negative':0,'neutral':0},'Feb':{'positive':0,'negative':0,'neutral':0},'Mar':{'positive':0,'negative':0,'neutral':0},
-                  'Apr':{'positive':0,'negative':0,'neutral':0},'May':{'positive':0,'negative':0,'neutral':0}, 'Jun':{'positive':0,'negative':0,'neutral':0},
-                  'Jul':{'positive':0,'negative':0,'neutral':0}, 'Aug':{'positive':0,'negative':0,'neutral':0}, 'Sep':{'positive':0,'negative':0,'neutral':0},
-                  'Oct':{'positive':0,'negative':0,'neutral':0}, 'Nov':{'positive':0,'negative':0,'neutral':0}, 'Dec':{'positive':0,'negative':0,'neutral':0}}
-        for tweet,time in tweettimes:
-            sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
-            month = time[3]
-            months[month][sentiment] += 1
-        pos = {}
-        neg = {}
-        neu = {}
-        m = months.keys()
-        for month in m:
-            pos[month] = months[month]['positive']
-            neg[month] = months[month]['negative']
-            neu[month] = months[month]['neutral']
-        p = []
-        n = []
-        nu = []
-        x = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-        for item in x:
-            p.append(pos[item])
-            n.append(neg[item])
-            nu.append(neu[item])
-
-        trace1 = go.Scatter( x = x, y = p, name = 'Positive', line = dict(color = ('rgb(205,12,24)'),
-                            width = 4))
-        trace2 = go.Scatter(x = x, y = n, name = 'Negative', line = dict(color = ('rgb(22,96,167)'),
-                            width = 4))
-        trace3 = go.Scatter(x=x,y = nu, name = 'Neutral', line = dict(color = ('rgb(0,0,0)'),
-                            width = 4))
-        
-        data = [trace1, trace2, trace3]
-        layout = dict(title = 'Tweet Sentiment over Time',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Sentiment'),)
-        fig = dict(data=data,layout=layout)
-        plotly.plot(fig)
-        plotly.image.save_as(fig, filename='SentimentOverTime.png')
 
