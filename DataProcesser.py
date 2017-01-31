@@ -8,9 +8,6 @@ import plotly.plotly as plotly
 import plotly.graph_objs as go
 import pdfWriter
 from collections import defaultdict
-#import plotly.tools as tls
-#import PIL
-#import urllib
 
 def stripStrings(strings, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldStripHashTags):
 	newStrings = []
@@ -42,55 +39,42 @@ def concatStrings(strings):
 		fullText += ' ' + string
 	return fullText
 
-# def getWordBag(strippedTweets, shouldSort):
-# 	wordCounts = defaultdict(lambda: 0)
-# 	for tweet in strippedTweets:
-# 		words = tweet.split()
-# 		for word in words:
-# 			wordCounts[word] += 1
-# 	if shouldSort:
-# 		return sorted(wordCounts.iteritems(), key= lambda (k,v) : v, reverse= True)
-# 	else:
-# 		return wordCounts
-
-# def plotTweetTimesByDayTime(times):
-# 	timeOfTweets = defaultdict(lambda:0)
-# 	for time in times:
-# 		timeOfTweets[(time[1],time[2])] += 1
-# 	days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-# 	times = range(24)
-# 	dayTimes = []
-# 	numbers = []
-# 	for day in days:
-# 		for time in times:
-# 			dayTimes.append((day,time))
-# 			numbers.append(timeOfTweets[(day,time)])
-# 	fig, ax = plt.subplots()
-# 	width = 1
-# 	rects1 = ax.bar(range(168),numbers, width)
-# 	ax.set_xticklabels(days)
-# 	ax.set_xticks((0, 24, 48, 72, 96, 120, 144))
-# 	plt.show()
+def getMonthDifference(month1, month2):
+	monthOrder = {"Jan" : 1, "Feb" : 2, "Mar" : 3, "Apr" : 4, "May" : 5, "Jun" : 6, "Jul" : 7, "Aug" : 8, "Sep" : 9, "Oct" : 10, "Nov" : 11, "Dec" : 12}
+	return monthOrder[month2] - monthOrder[month1]
 
 def plotTweetTimesByTime(times):
 	print 'plotTweetTimesByTime - time bar chart'
+	totalHours = (((times[0][0] - times[-1][0]) * 365 + getMonthDifference(times[0][3], times[-1][3])) * 30) * 24.0
 	timeDict = defaultdict(lambda: 0)
 	for time in times:
 	    timeDict[int(time[2])] += 1
 	tweetsPerHour = []   
 	for time in range(24):
-	    tweetsPerHour.append(timeDict[time])
-	trace1 = go.Scatter( x = range(24), y = tweetsPerHour, name = 'Tweets', line = dict(color = ('rgb(205,12,24)'),
-	                    width = 4))
-	data = [trace1]
-	layout = dict(title = 'Tweet Count per Time Of Day' ,xaxis = dict(title = 'Time of Day'),yaxis = dict(title = 'Tweet Count'),)
-	fig = dict(data=data,layout=layout)
+	    tweetsPerHour.append(timeDict[time]/totalHours)
+
+	trace0 = go.Bar(
+                x=['12:00 AM', '1:00 AM', '2:00 AM', '3:00 AM', '4:00 AM', '5:00 AM', '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM',
+                '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM', '11:00 PM'],
+                y=tweetsPerHour,
+                marker=dict(
+                    color=('rgb(205,12,24)')
+            ))
+	data = [trace0]
+	layout = go.Layout(
+	            title='<b>Time Distribution</b>',
+	            xaxis=dict(tickangle=-45),
+	            yaxis = dict(title = 'Tweets Per Hour'),
+	            margin=go.Margin(b=135)
+	)
+
+	fig = go.Figure(data=data, layout=layout)
 	plotly.image.save_as(fig, filename='tweets_by_time.png')
 
 def generateReport (handle, testing):
 	t = tDataGatherer.TDataGatherer()
 	userInfo = t.getUser(handle) #(name, bio)
-	t.fetchStatuses(handle, 200)
+	t.fetchStatuses(handle, 1500)
 	statuses = t.getFullStatuses()
 	tweets = t.getTweets(True, False)
 	times = t.getTimes()
@@ -98,17 +82,17 @@ def generateReport (handle, testing):
 	fullText = concatStrings(strippedTweets)
 	wc = wordCloud.WordCloudHelper()
 	wc.graphWords(fullText)
-	s = sentimentclassification.SentimentClassifier(strippedTweets, times)
+	s = sentimentclassification.SentimentClassifier(tweets, strippedTweets, times)
 	s.getTweetSentiment(testing, True)
 	s.sentimentOverTime()
 	topicTweets = s.getTweetTopics(testing, True)
 	plotTweetTimesByTime(times)
-	pdfW = pdfWriter.PDFWriter(userInfo[0], handle, userInfo[1], topicTweets)
+	flaggedTweets = s.findAdultContent()
+	pdfW = pdfWriter.PDFWriter(userInfo[0], handle, userInfo[1], topicTweets, flaggedTweets)
 	pdfW.generatePDF()
 	
 
-generateReport("@CoachRhoades", True)
-
+generateReport("@RealDonaldTrump", False)
 	
 
 

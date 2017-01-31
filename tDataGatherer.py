@@ -20,7 +20,6 @@ class TDataGatherer:
 		self.offset = self.user.utc_offset / 3600
 		print "TDataGatherer - offset = " + str(self.offset)
 		print "TDataGatherer - user info fetched"
-		print self.user.profile_image_url
 		urllib.urlretrieve(self.user.profile_image_url.replace("_normal.jpeg", ".jpeg"), "prof_pic.jpg")
 		print "TDataGatherer - profile picture stored"
 		return [self.user.name, self.user.description]

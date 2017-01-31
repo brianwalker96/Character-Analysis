@@ -16,13 +16,14 @@ import plotly.tools as tls
 from collections import defaultdict
 
 class SentimentClassifier:
-    def __init__ (self, tweets, times):
+    def __init__ (self, rawTweets, tweets, times):
         print "SentimentClassifier - initializing"
         dAccess = dAccessToken.dAccessToken()
         self.datumBox = DatumBox(dAccess.api_key)
         self.tweets = tweets
+        self.rawTweets = rawTweets
         self.times = times
-        self.colorMapping = {"positive": 'rgb(0, 0, 255)', "negative": 'rgb(232, 17, 15)', "neutral": 'rgb(156, 156, 156)'}
+        self.colorMapping = {"positive": 'rgb(100, 100, 255)', "negative": 'rgb(232, 17, 15)', "neutral": 'rgb(156, 156, 156)'}
         #tls.set_credentials_file(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
         #plotly.sign_in(username='NickJohnsond660', api_key='EceN1JPVhEcH13pY5JlF')
         #Alternate Credentials
@@ -32,15 +33,18 @@ class SentimentClassifier:
     def getTweetSentiment(self, testing, shouldPlot):
         print "SentimentClassifier - determining sentiment"
         self.sentiments = []
+        i = 0
         for tweet in self.tweets:
-            if len(self.sentiments) % 25 == 0:
-                print "SentimentClasiiffier - determining sentiment " + str(len(self.sentiments))
             sentiment = ""
-            if testing:
-                sentiment = random.choice(["positive", "negative", "neutral"])
-            else :
-                sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
-            self.sentiments.append(sentiment)
+            if i % 5 == 0:
+                if testing:
+                    sentiment = random.choice(["positive", "negative", "neutral"])
+                else :
+                    sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
+                self.sentiments.append(sentiment)
+                if len(self.sentiments) % 25 == 0:
+                    print "SentimentClasiiffier - determining sentiment " + str(len(self.sentiments))
+            i += 1
         if shouldPlot:
             self.plotSentimentPie()
 
@@ -53,7 +57,7 @@ class SentimentClassifier:
         for sent in self.sentiments:
             numOfSent[sent] += 1
         for sent in numOfSent:
-            labels.append(sent)
+            labels.append(sent.title())
             values.append(numOfSent[sent])
             colors.append(self.colorMapping[sent])
         fig = {
@@ -62,62 +66,82 @@ class SentimentClassifier:
                       'type': 'pie',
                       'marker': {'colors': colors},
                       }],
-            'layout': {'title': ' Positivity Analysis'}
+            'layout': {'title': '<b>Sentiment Distribution</b>'}
         }
         plotly.image.save_as(fig, filename='sentiment_pie_chart.png')           
     
     def getTweetTopics(self, testing, shouldPlot):
         print "SentimentClassifier - determining tweets' topic"
         self.topics = []
+        i = 0
         for tweet in self.tweets:
-            topic = ""
-            if testing:
-                topic = random.choice(["Arts", 'Business & Economy', 'Sports', 'Home & Domestic Life'])
-            else : 
-                topic = datum_box.topic_classification(tweet)
-            self.topics.append(topic) 
+            if i % 5 == 0:
+                topic = ""
+                if testing:
+                    topic = random.choice(["Arts", 'Business & Economy', 'Sports', 'Home & Domestic Life'])
+                else : 
+                    topic = self.datumBox.topic_classification(tweet)
+                self.topics.append(topic) 
+            i += 1
         if shouldPlot:
             return self.plotTopicResults() 
 
     def sentimentOverTime(self):
-        #BUG - edge case - going over multiple years of time
         print 'SentimentClassifier - sentiment over time graph'
-        sentTimes = zip(self.sentiments, self.times)
+        sampleTimes = []
+        for i in range(len(self.times)):
+            if i % 5 == 0:
+                sampleTimes.append(self.times[i])
+        #Make monthly (w/ year) counts by sentiment
+        sentTimes = zip(self.sentiments, sampleTimes)
         monthCts = defaultdict(lambda: defaultdict(lambda: 0))
         for sent,time in sentTimes:
-            monthCts[time[3]][sent] += 1
-        months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-        pos = {}
-        neg = {}
-        neu = {}
-        for month in months:
-            pos[month] = monthCts[month]['positive']
-            neg[month] = monthCts[month]['negative']
-            neu[month] = monthCts[month]['neutral']
-        p = []
-        n = []
-        nu = []
-        for item in months:
-            p.append(pos[item])
-            n.append(neg[item])
-            nu.append(neu[item])
-
-        trace1 = go.Scatter( x = months, y = p, name = 'Positive', line = dict(color = ('rgb(205,12,24)'),
-                            width = 4))
-        trace2 = go.Scatter(x = months, y = n, name = 'Negative', line = dict(color = ('rgb(22,96,167)'),
-                            width = 4))
-        trace3 = go.Scatter(x=months ,y = nu, name = 'Neutral', line = dict(color = ('rgb(0,0,0)'),
-                            width = 4))
+            monthCts[time[3] + " " + str(time[0])][sent] += 1
         
-        data = [trace1, trace2, trace3]
-        layout = dict(title = 'Tweet Sentiment over Time',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Sentiment'),)
-        fig = dict(data=data,layout=layout)
+        #create list of contiguous months by starting at oldest month, increasing to newest month
+        curMonth = self.times[-1][3]
+        curYear = self.times[-1][0]
+        newestMonth = self.times[0][3] 
+        newestYear = self.times[0][0]
+        nextMonth  = {"Jan" : "Feb", "Feb" : "Mar", "Mar" : "Apr", "Apr" : "May", "May" : "Jun", "Jun" : "Jul", "Jul" : "Aug", "Aug" : "Sep", "Sep" : "Oct", "Oct" : "Nov", "Nov" : "Dec", "Dec" : "Jan" }
+        months = []
+        while (curMonth != newestMonth or curYear != newestYear):
+            months.append(curMonth + " " + str(curYear))
+            curMonth = nextMonth[curMonth]
+            if (curMonth == "Jan"):
+                curYear += 1
+
+        #make the data points by combining the list of contiguous months and monthly counts
+        pos = []
+        neg = []
+        neu = []
+        for month in months:
+            monthTweets = (monthCts[month]["positive"] + monthCts[month]["negative"] + monthCts[month]["neutral"]) * 1.0
+            pos.append(monthCts[month]["positive"] / monthTweets)
+            neg.append(monthCts[month]["negative"] / monthTweets)
+            neu.append(monthCts[month]["neutral"] / monthTweets)
+
+        #Graph
+        posTrace = go.Scatter( x = months, y = pos, name = 'Positive', line = dict(color = ('rgb(205,12,24)'),
+                            width = 4))
+        negTrace = go.Scatter(x = months, y = neg, name = 'Negative', line = dict(color = ('rgb(22,96,167)'),
+                            width = 4))
+        neuTrace = go.Scatter(x=months ,y = neu, name = 'Neutral', line = dict(color = ('rgb(0,0,0)'),
+                            width = 4))
+        sentData = [posTrace, negTrace, neuTrace]
+        layout = dict(title = '<b>Tweet Sentiment over Time</b>',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Percentage of Tweets'),)
+        fig = dict(data=sentData,layout=layout)
         plotly.image.save_as(fig, filename='sentiment_over_time.png')
 
     def plotTopicResults(self):
         print "SentimentClassifier - topic bar graph"
         # bar chart showing top topics
-        topicTweet = zip(self.topics, self.tweets)
+        sampleTweets = []
+        for i in range(len(self.times)):
+            if i % 5 == 0:
+                sampleTweets.append(self.tweets[i])
+
+        topicTweet = zip(self.topics, sampleTweets)
 
         global topic_counts, topics, colors_by_topic
         arts = 0
@@ -134,8 +158,8 @@ class SentimentClassifier:
         sports = 0
 
         topicDict = defaultdict(lambda : [])
-        for topic, tweet in topicTweet:
-            topicDict[topic].append(tweet)
+        for i in range(len(topicTweet)):
+            topicDict[topicTweet[i][0]].append(i)
 
         for topic, tweet in topicTweet:
             if topic == 'Arts':
@@ -193,8 +217,9 @@ class SentimentClassifier:
         topics = ['Arts', 'Business & Economy', 'Computers & Technology',
                   'Health', 'Home & Domestic Life', 'News', 'Recreation & Activities',
                   'Reference & Education', 'Science', 'Shopping', 'Society', 'Sports']
-        topic_counts = [arts, biz_and_econ, comp_and_tech, health, h_and_d, news,
-                        rec_and_act, ref_and_ed, science, shopping, society, sports]
+        numTweets = (arts + biz_and_econ + comp_and_tech + health + h_and_d + news + rec_and_act + ref_and_ed + science + shopping + society + sports) * 1.0
+        topic_counts = [arts / numTweets, biz_and_econ / numTweets, comp_and_tech / numTweets, health / numTweets, h_and_d / numTweets, news / numTweets,
+                        rec_and_act / numTweets, ref_and_ed / numTweets, science / numTweets, shopping /numTweets, society / numTweets , sports /numTweets]
         trace0 = go.Bar(
                 x=topics, y=topic_counts,
                 marker=dict(
@@ -203,8 +228,9 @@ class SentimentClassifier:
 
         data = [trace0]
         layout = go.Layout(
-                title='Top Three Tweet Topics for' + 'Test',
+                title='<b>Topic Distribution</b>',
                 xaxis=dict(tickangle=-45),
+                yaxis = dict(title = 'Percentage of Tweets'),
                 margin=go.Margin(b=135)
             )
 
@@ -223,10 +249,26 @@ class SentimentClassifier:
         third_topic_tweet = random.choice(topicDict[third_topic])
         del topicDict[third_topic]
 
-        return [(str(top_topic), str(top_topic_tweet)),
-                (str(second_topic), str(second_topic_tweet)),
-                (str(third_topic), str(third_topic_tweet))]
+        return [(str(top_topic), self.rawTweets[top_topic_tweet]),
+                (str(second_topic), self.rawTweets[second_topic_tweet]),
+                (str(third_topic), self.rawTweets[third_topic_tweet])]
 
+    def findAdultContent(self):
+        badWords = ["anal", "anus", " ass ", "asshole" , "bastard", "bitch", "biatch", "blood", "blow", "boner", "boob", " bum", "butt", "clit", "cock",
+        "crap", "cunt", "damn", "dick", "dildo", "dyke", "fag", "fuck", "hell ", "homo", "gay", "jerk", "jizz", "nigg", "penis", "piss", "poop", "prick",
+        "pube", "pussy", "queer", "sack", "sex", "shit", "slut", " tit ", " tits ", "vagina", "wank", "whore", "weed", "marijuana", "cocaine", "pot", "mary jane",
+        "acid", "crack", "lsd", "dank", "copulate", "cum", "suck", "69", "fingering", "fisting", "jack ", "hate"]
+        flagged = []
+        idxs = []
+        for i in range(len(self.tweets)):
+            for badWord in badWords:
+                if badWord in self.tweets[i]:
+                    print badWord + ' IS IN ' + self.tweets[i]
+                    idxs.append(i)
+                    break
+        for idx in idxs:
+            flagged.append(self.rawTweets[idx])
+        return flagged
     
 
 
