@@ -36,12 +36,13 @@ class SentimentClassifier:
         i = 0
         for tweet in self.tweets:
             sentiment = ""
-            if i % 5 == 0:
+            if i % 2 == 0:
                 if testing:
                     sentiment = random.choice(["positive", "negative", "neutral"])
                 else :
                     sentiment = self.datumBox.twitter_sentiment_analysis(tweet)
                 self.sentiments.append(sentiment)
+                print (tweet + " - " + sentiment)
                 if len(self.sentiments) % 25 == 0:
                     print "SentimentClasiiffier - determining sentiment " + str(len(self.sentiments))
             i += 1
@@ -81,7 +82,9 @@ class SentimentClassifier:
                     topic = random.choice(["Arts", 'Business & Economy', 'Sports', 'Home & Domestic Life'])
                 else : 
                     topic = self.datumBox.topic_classification(tweet)
-                self.topics.append(topic) 
+                self.topics.append(topic)
+                if len(self.sentiments) % 25 == 0:
+                    print "SentimentClasiiffier - determining topic " + str(len(self.sentiments)) 
             i += 1
         if shouldPlot:
             return self.plotTopicResults() 
@@ -117,9 +120,14 @@ class SentimentClassifier:
         neu = []
         for month in months:
             monthTweets = (monthCts[month]["positive"] + monthCts[month]["negative"] + monthCts[month]["neutral"]) * 1.0
-            pos.append(monthCts[month]["positive"] / monthTweets)
-            neg.append(monthCts[month]["negative"] / monthTweets)
-            neu.append(monthCts[month]["neutral"] / monthTweets)
+            if monthTweets > 0 :
+                pos.append(monthCts[month]["positive"] / monthTweets)
+                neg.append(monthCts[month]["negative"] / monthTweets)
+                neu.append(monthCts[month]["neutral"] / monthTweets)
+            else :
+                pos.append(0)
+                neg.append(0)
+                neu.append(0)
 
         #Graph
         posTrace = go.Scatter( x = months, y = pos, name = 'Positive', line = dict(color = ('rgb(205,12,24)'),
@@ -254,10 +262,10 @@ class SentimentClassifier:
                 (str(third_topic), self.rawTweets[third_topic_tweet])]
 
     def findAdultContent(self):
-        badWords = ["anal", "anus", " ass ", "asshole" , "bastard", "bitch", "biatch", "blood", "blow", "boner", "boob", " bum", "butt", "clit", "cock",
-        "crap", "cunt", "damn", "dick", "dildo", "dyke", "fag", "fuck", "hell ", "homo", "gay", "jerk", "jizz", "nigg", "penis", "piss", "poop", "prick",
-        "pube", "pussy", "queer", "sack", "sex", "shit", "slut", " tit ", " tits ", "vagina", "wank", "whore", "weed", "marijuana", "cocaine", "pot", "mary jane",
-        "acid", "crack", "lsd", "dank", "copulate", "cum", "suck", "69", "fingering", "fisting", "jack ", "hate"]
+        badWords = ["anal", "anus", " ass ", "asshole" , "bastard", "bitch", "biatch", "blood", "blow ", "boner", "boob", " bum", "butt ", "butts", "clit", "cock",
+        "crap", "cunt", "damn", "dick", "dildo", "dyke", "fag", "fuck", " hell ", " homo", "gay", "jerk", "jizz", "nigg", "penis", "piss", "poop", "prick",
+        "pube", "pussy", "queer", "sack", "sex", "shit", "slut", " tit ", " tits ", "vagina", "wank", "whore", "weed", "marijuana", "cocaine", " pot ", "pothead", "mary jane",
+        "acid", "crack", "lsd", "dank", "copulate", "cum", "suck", "69", "fingering", "fisting", "broccoli"]
         flagged = []
         idxs = []
         for i in range(len(self.tweets)):

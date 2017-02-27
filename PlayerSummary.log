@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.29)  15 JAN 2017 14:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100 64-bit) (preloaded format=pdflatex 2016.12.29)  27 FEB 2017 11:08
 entering extended mode
 **./PlayerSummary.tex
 (PlayerSummary.tex
@@ -221,11 +221,11 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<prof_pic.jpg, id=1, 48.18pt x 48.18pt>
+<prof_pic.jpg, id=1, 513.92pt x 513.92pt>
 File: prof_pic.jpg Graphic file (type jpg)
  <use prof_pic.jpg>
 Package pdftex.def Info: prof_pic.jpg used on input line 14.
-(pdftex.def)             Requested size: 216.81082pt x 216.8461pt.
+(pdftex.def)             Requested size: 216.81082pt x 216.80946pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 16.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -258,68 +258,347 @@ Package pdftex.def Info: tweets_by_time.png used on input line 32.
 (pdftex.def)             Requested size: 433.62166pt x 309.74255pt.
 
 [2 <./word_cloud.png (PNG copy)> <./tweets_by_time.png>]
-<topic_bar.png, id=18, 702.625pt x 501.875pt>
-File: topic_bar.png Graphic file (type png)
- <use topic_bar.png>
-Package pdftex.def Info: topic_bar.png used on input line 34.
-(pdftex.def)             Requested size: 433.62166pt x 309.74255pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 36--37
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 38--40
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 41--43
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 44--46
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 47--49
-
- []
-
-[3 <./topic_bar.png>] <sentiment_over_time.png, id=24, 702.625pt x 501.875pt>
+<sentiment_over_time.png, id=18, 702.625pt x 501.875pt>
 File: sentiment_over_time.png Graphic file (type png)
 
 <use sentiment_over_time.png>
-Package pdftex.def Info: sentiment_over_time.png used on input line 51.
+Package pdftex.def Info: sentiment_over_time.png used on input line 35.
 (pdftex.def)             Requested size: 542.02501pt x 387.18776pt.
 
-<sentiment_pie_chart.png, id=25, 702.625pt x 501.875pt>
+<sentiment_pie_chart.png, id=19, 702.625pt x 501.875pt>
 File: sentiment_pie_chart.png Graphic file (type png)
 
 <use sentiment_pie_chart.png>
-Package pdftex.def Info: sentiment_pie_chart.png used on input line 53.
+Package pdftex.def Info: sentiment_pie_chart.png used on input line 37.
 (pdftex.def)             Requested size: 433.62166pt x 309.74255pt.
- [4 <./sentiment_over_time.png> <./sentiment_pie_chart.png>] (PlayerSummary.aux
-) ) 
+ [3 <./sentiment_over_time.png> <./sentiment_pie_chart.png>]
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 \\
+        PSA: Anybody raised in Seattle, please tell your fake friends that i...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ...ve here. \#SeattleSucks \#Gray \#Rain\\ \\
+                                                   My friend has assured me ...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ... can still be a fuck if I want \#Pheu\\ \\
+                                                   And, Mariners fever strik...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ...d, Mariners fever strikes again. Fuck\\ \\
+                                                   @tfay3 definitely meant S...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ...t Seager there. Ackley can't do shit.\\ \\
+                                                   Lloyd. I don't care who t...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 .... Hmm maybe he'll be better this time\\ \\
+                                                   The only issue with that ...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ... ipod with my hood on on the way down\\ \\
+                                                   And the mob is headed to ...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.40 ...n\\ \\ And the mob is headed to dicks\\ \\
+                                                   Dear Santa,
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 Love, Brian\\ \\
+                      My goal for the summer is to never sit on my ass for a...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ... a whole day \#SoFarSoGood \#LiveLife\\ \\
+                                                   Reports are bullshit. Or,...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...llshit. Or, at least mine usually are\\ \\
+                                                   Fuck David Stern. Fuck Cl...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...hnson. Fuck Sacramento. Fuck the NBA.\\ \\
+                                                   Shame on the person who l...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ... like the average metro bus rider now\\ \\
+                                                   No matter how chill my we...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...uch shit I need to do on Sunday night\\ \\
+                                                   If we legalize marijuana,...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...n come play for UW. \#RecruitingPitch\\ \\
+                                                   Opening ceremony is so da...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ... ceremony is so damn long. \#Olympics\\ \\
+                                                   @tfay3 knows how to play ...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...w to play though. but ya he's a bitch\\ \\
+                                                   Karma is coming to bite C...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...esMeHappy \#NoSympathy \#SeattleCurse\\ \\
+                                                   Damn. Can't complain abou...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...bias for a while. No WC teams in S16.\\ \\
+                                                   damn... http://t.co/3Taeq...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...16.\\ \\ damn... http://t.co/3Taeqz6h\\ \\
+                                                   Damn. @TWroten14 got up. ...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.42 ...t up. \#SportcenterTopPlay \#dunkface\\ \\
+                                                   Sunday night homework suc...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: \begin{center} on input line 26 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.44 \end{document}
+                   
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[4] (PlayerSummary.aux) )
+(\end occurred inside a group at level 1)
+
+### semi simple group (level 1) entered at line 26 (\begingroup)
+### bottom level 
 Here is how much of TeX's memory you used:
- 3214 strings out of 493333
- 50473 string characters out of 3139193
- 114179 words of memory out of 3000000
- 6724 multiletter control sequences out of 15000+200000
- 8849 words of font info for 31 fonts, out of 3000000 for 9000
+ 3207 strings out of 493333
+ 50366 string characters out of 3139193
+ 117179 words of memory out of 3000000
+ 6719 multiletter control sequences out of 15000+200000
+ 8502 words of font info for 30 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 44i,6n,42p,356b,233s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmti12.pfb>
-Output written on PlayerSummary.pdf (4 pages, 326374 bytes).
+ 44i,6n,42p,1122b,233s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmb
+x10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on PlayerSummary.pdf (4 pages, 352162 bytes).
 PDF statistics:
- 50 PDF objects out of 1000 (max. 8388607)
+ 44 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

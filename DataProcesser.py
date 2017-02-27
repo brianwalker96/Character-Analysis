@@ -29,7 +29,7 @@ def stripString(s, shouldStripPunct, shouldStripURLs, shouldStripUsers, shouldSt
 		exclude = set(string.punctuation)
 		exclude.remove("'")
 		s = ''.join(ch for ch in s if ch not in exclude)
-	s = re.sub(r'RT', '', s, flags=re.MULTILINE)
+	#s = re.sub(r'RT', '', s, flags=re.MULTILINE)
 	return s.lower()
 
 def concatStrings(strings):
@@ -71,13 +71,13 @@ def plotTweetTimesByTime(times):
 	fig = go.Figure(data=data, layout=layout)
 	plotly.image.save_as(fig, filename='tweets_by_time.png')
 
-def generateReport (handle, testing):
+def generateReport (handle, testing, utc):
 	t = tDataGatherer.TDataGatherer()
-	userInfo = t.getUser(handle) #(name, bio)
-	t.fetchStatuses(handle, 1500)
+	userInfo = t.getUser(handle, utc) #returns (name, bio)
+	t.fetchStatuses(handle, 1900)
 	statuses = t.getFullStatuses()
 	tweets = t.getTweets(True, False)
-	times = t.getTimes()
+	times = t.getTimes(True, False)
 	strippedTweets = stripStrings(tweets, True, True, True, True)
 	fullText = concatStrings(strippedTweets)
 	wc = wordCloud.WordCloudHelper()
@@ -85,14 +85,17 @@ def generateReport (handle, testing):
 	s = sentimentclassification.SentimentClassifier(tweets, strippedTweets, times)
 	s.getTweetSentiment(testing, True)
 	s.sentimentOverTime()
-	topicTweets = s.getTweetTopics(testing, True)
 	plotTweetTimesByTime(times)
 	flaggedTweets = s.findAdultContent()
-	pdfW = pdfWriter.PDFWriter(userInfo[0], handle, userInfo[1], topicTweets, flaggedTweets)
+	pdfW = pdfWriter.PDFWriter(userInfo[0], handle, userInfo[1], flaggedTweets)
 	pdfW.generatePDF()
 	
 
-generateReport("@RealDonaldTrump", False)
-	
-
+generateReport("@thebwalk", True, -7)
+# a = True
+# b = False
+# if ((True and not a) or (False and a)):
+# 	print 'a'
+# if ((True and not b) or (False and b)):
+# 	print 'b'
 

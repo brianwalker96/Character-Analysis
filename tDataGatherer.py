@@ -15,12 +15,16 @@ class TDataGatherer:
 
 		#NOTE ONLY 100 API CALLS PER HOUR
 
-	def getUser(self, username):
+	def getUser(self, username, utc):
 		self.user = self.api.GetUser(screen_name = username)
-		self.offset = self.user.utc_offset / 3600
+		if (utc == 0) :
+			self.offset = self.user.utc_offset / 3600
+		else :
+			self.offset = utc
 		print "TDataGatherer - offset = " + str(self.offset)
 		print "TDataGatherer - user info fetched"
-		urllib.urlretrieve(self.user.profile_image_url.replace("_normal.jpeg", ".jpeg"), "prof_pic.jpg")
+		print self.user.profile_image_url
+		urllib.urlretrieve(self.user.profile_image_url.replace("_normal.jpg", ".jpg").replace("_normal.jpeg", ".jpeg"), "prof_pic.jpg")
 		print "TDataGatherer - profile picture stored"
 		return [self.user.name, self.user.description]
 
@@ -48,25 +52,27 @@ class TDataGatherer:
 		tweets = []
 		printable = set(string.printable)
 		for status in self.statuses:
-			if ((userTweets and not status.retweeted) or (retweets and status.retweeted)):
+			if ((userTweets and not status.retweeted_status) or (retweets and status.retweeted_status)):
+				print status.retweeted_status
 				tweets.append(status.text)#Unicode / ascii errors when looking at strings
 		return tweets
 
-	def getTimes(self):
+	def getTimes(self, userTweets, retweets):
 		print "TDataGatherer - formatting time"
 		timeOfTweets = []
 		previousDay = {"Sun":"Sat", "Mon":"Sun", "Tue":"Mon", "Wed":"Tue", "Thu":"Wed", "Fri":"Thu", "Sat":"Fri"}
 		nextDay = {"Sun":"Mon", "Mon":"Tue", "Tue":"Wed", "Wed":"Thu", "Thu":"Fri", "Fri":"Sat", "Sat":"Sun"}
 		for status in self.statuses:
-			year = int(status.created_at[26:30])
-			month = status.created_at[4:7]
-			day = status.created_at[0:3]
-			hour = int(status.created_at[11:13]) + self.offset
-			if hour < 0:
-			 	hour += 24
-			 	day = previousDay[day]
-			if hour > 24:
-			 	hour -= 24
-			 	day = nextDay[day]		
-			timeOfTweets.append((year,day, hour, month))
+			if ((userTweets and not status.retweeted_status) or (retweets and status.retweeted_status)):
+				year = int(status.created_at[26:30])
+				month = status.created_at[4:7]
+				day = status.created_at[0:3]
+				hour = int(status.created_at[11:13]) + self.offset
+				if hour < 0:
+			 		hour += 24
+			 		day = previousDay[day]
+				if hour > 24:
+			 		hour -= 24
+			 		day = nextDay[day]		
+				timeOfTweets.append((year,day, hour, month))
 		return timeOfTweets

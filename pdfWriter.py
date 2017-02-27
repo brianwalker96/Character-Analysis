@@ -3,27 +3,30 @@ import datetime
 import unicodedata
 
 class PDFWriter:
-    def __init__ (self, name, handle, bio, topThree, flaggedTweets):
+    def __init__ (self, name, handle, bio, flaggedTweets):
         print "PDFWriter - intializing"
         self.name = name
         self.handle = handle
         self.bio = bio
-        self.topThree = topThree
         self.flagged = flaggedTweets
         print "name: " + str(self.name)
         print "handle: " + str(self.handle)
         print "bio: " + str(self.bio)
-        print "topThree: " + str(self.topThree)
         print "flagged: " + str(self.flagged)
 
     def latexUnicode(self, text):
         return self.latexFormat(unicodedata.normalize('NFKD', text).encode('ascii','ignore'))
 
     def latexFormat(self, text):
-        return text.replace('&', '\\&').replace('#', '\\#')
+        return text.replace('&', '\\&').replace('#', '\\#').replace("_", " ")
 
     def generatePDF(self) :
-        print "PDFWriter - generating PDF"
+        print "PDFWriter - generating PDF1"
+        questTweets = ""
+        for i in range(0, len(self.flagged)):
+            questTweets += "\\smallbreak "
+            questTweets += self.latexUnicode(self.flagged[i]) + '\\\\\n'
+        print "PDFWriter - generating PDF2"
         lines = [ '\\documentclass[12pt]{article}', 
         '\\usepackage{graphicx}', 
         '\\usepackage{subfig}', 
@@ -57,35 +60,21 @@ class PDFWriter:
         '\\bigbreak',
         '\\includegraphics[width=0.8 \\textwidth]{tweets_by_time.png}',
         '\\newpage',
-        '\\includegraphics[width=0.8\\textwidth]{topic_bar.png}\\\\',
-        '\\end{center}',
-        '\\textbf{Sample Tweets}\\\\',
-        '\\bigbreak',
-        '\\noindent \\large \\textit{' + self.latexFormat(self.topThree[0][0]) + '}\\\\',
-        self.latexUnicode(self.topThree[0][1]) +'\\\\',
-        '\\smallbreak',
-        '\\noindent \\large \\textit{' + self.latexFormat(self.topThree[1][0]) + '}\\\\',
-        self.latexUnicode(self.topThree[1][1]) +'\\\\',
-        '\\smallbreak',
-        '\\noindent \\large \\textit{' + self.latexFormat(self.topThree[2][0]) + '}\\\\',
-        self.latexUnicode(self.topThree[2][1]) +'\\\\',
-        '\\smallbreak',
-        '\\noindent \\textbf{Questionable Tweets:}\\\\',
-        self.latexUnicode(self.flagged[0]) + '\\\\',
-        '\\newpage',
         '\\begin{center}',
         '\\includegraphics[width=1.0\\textwidth]{sentiment_over_time.png}',
         '\\bigbreak',
         '\\includegraphics[width=0.8 \\textwidth]{sentiment_pie_chart.png}\\\\',
+        '\\newpage',
+        '\\noindent \\large \\textbf{Questionable Tweets:}\\\\',
         '\\end{center}',
+        questTweets,
         '\\end{document}']
 
-        with open('PlayerSummary.tex', 'w+') as f:
+        with open( self.name + '.tex', 'w+') as f:
              for line in lines:
                  f.write(line + "\n")
 
-        cmd = ['pdflatex', '-interaction', 'nonstopmode', 'PlayerSummary.tex']
-        proc = subprocess.Popen(cmd, shell=True)
+        cmd = ['pdflatex', '-interaction', 'nonstopmode', self.name + '.tex']
+        proc = subprocess.Popen(cmd)
         proc.communicate()
-        subprocess.Popen(["PlayerSummary.pdf"],shell=True)
 
